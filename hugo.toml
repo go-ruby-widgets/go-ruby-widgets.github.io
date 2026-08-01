@@ -1,0 +1,61 @@
+baseURL = "https://go-ruby-widgets.github.io/"
+title = "go-ruby-widgets"
+disableKinds = ["taxonomy", "term", "RSS", "sitemap", "404"]
+
+[markup.goldmark.renderer]
+  unsafe = true
+
+[[params.adapters]]
+  name = "widgets"
+  repo = "https://github.com/go-ruby-widgets/widgets"
+  status = "ready"
+  blurb = "A live pixel widget UI toolkit over `go-widgets/toolkit` + `go-widgets/painter`: buttons, labels, entries, lists, menus and the container/layout system (box/border/card/grid/dock) that arranges them. Every widget and container is an integer **handle**; `Render` paints a tree to an RGBA buffer, `Dispatch` routes input events by hit-testing bounds."
+  snippet = '''require "widgets"
+
+root  = Widgets.v_box
+ok    = Widgets.button("OK", "on_ok")
+Widgets.add_widget(root, ok)
+Widgets.layout(root, 200, 80)
+img   = Widgets.render(root, 200, 80)   # => { "pixels"=>, "stride"=>800, "w"=>200, "h"=>80 }
+fired = Widgets.dispatch(ok, { "kind" => "click" })   # => { "fired" => ["on_ok"], ... }'''
+
+[[params.adapters]]
+  name = "tui"
+  repo = "https://github.com/go-ruby-widgets/tui"
+  status = "ready"
+  blurb = "A terminal-cell UI toolkit over `go-widgets/tui`: label/button/entry/check_button/list_box/progress_bar widgets, a **border layout** container (header/footer bands + overlays), draggable `h_split`/`v_split` panes and a **card layout** `notebook` (tab strip). `render` emits a self-contained ANSI stream; `render_cells`/`decode_cells` return the decoded grid at **cell precision** for tests."
+  snippet = '''require "tui"
+
+button = Tui.button("OK")
+button.on_click("ok")
+
+root = Tui.container
+root.set_header_height(1)
+root.set_header(Tui.label("Title"))
+root.set_body(button)
+
+Tui.set_size(root, 40, 10)
+puts Tui.render(root, 40, 10)                      # => ANSI String
+fired = Tui.dispatch(button, {"kind" => "click"}) # => {"fired"=>["ok"], "repaint"=>true}'''
+
+[[params.adapters]]
+  name = "mvvm"
+  repo = "https://github.com/go-ruby-widgets/mvvm"
+  status = "ready"
+  blurb = "The data-binding layer over `go-widgets/mvvm`: a bindable `Observable` property, a `Command` action and an `ObservableList` collection. A hosted Go library can't call a Ruby block synchronously, so every change queues a callback-id-tagged event Hash; the rbgo binding polls it once per tick with `drain_events` — the **id + drain** seam."
+  snippet = '''require "mvvm"
+
+name = Mvvm.observable("")
+name.subscribe(:on_name)
+name.set("Ada")                    # queues {callback_id: :on_name, kind: "changed", value: "Ada"}
+
+Mvvm.drain_events.each do |ev|     # => Array<Hash>, once per UI tick
+  dispatch(ev[:callback_id], ev)   # Ruby runs the actual block
+end'''
+
+[[params.adapters]]
+  name = "rbgo binding"
+  repo = "https://github.com/go-embedded-ruby/ruby"
+  status = "planned"
+  blurb = "`require \"widgets\"` / `\"tui\"` / `\"mvvm\"` — the thin `method_missing` shim over each adapter's `Call` that exposes it inside `github.com/go-embedded-ruby/ruby` (rbgo). Pending in that repo; nothing in the three adapters above depends on the Ruby runtime."
+  snippet = ""
