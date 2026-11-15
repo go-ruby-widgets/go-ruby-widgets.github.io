@@ -45,11 +45,9 @@
   <div class="hero"><div class="wrap">
     <div>
       <h1 class="head">go-ruby-widgets</h1>
-      <p class="sub">The Ruby face of <a href="https://github.com/go-widgets">go-widgets</a> — pixel widgets, terminal-cell widgets and data-binding, each a pure-Go gem core that rbgo binds as <code>require "widgets"</code> / <code>"tui"</code> / <code>"mvvm"</code>.</p>
-      <div class="cta">
-        <a class="btn btn-primary" href="/docs/">{{ partial "icons/book.html" . }}Documentation</a>
-        <a class="btn btn-ghost" href="https://github.com/go-ruby-widgets">{{ partial "icons/github.html" . }}GitHub</a>
-      </div>
+      <p class="sub">The Ruby face of <a href="https://github.com/go-widgets">go-widgets</a> — pixel widgets, terminal-cell widgets and data-binding, each a {{ if partial "mantra-on.html" . }}Go{{ else }}pure-Go{{ end }} gem core that rbgo binds as <code>require "widgets"</code> / <code>"tui"</code> / <code>"mvvm"</code>.</p>
+      {{/* [[params.cta]] in hugo.toml: the kit renders the row */}}
+      {{ partial "cta.html" . }}
       <div class="trust">{{ if not (partial "mantra-on.html" $) }}<span class="pill">pure Go · zero cgo</span>{{ end }}<span class="pill">require "widgets" / "tui" / "mvvm"</span><span class="pill">method_missing dispatch</span><span class="pill">Hash / Array results</span><span class="pill">handle-addressed object graph</span><span class="pill">RGBA + ANSI render seams</span><span class="pill">id + drain callback seam</span><span class="pill">no Ruby-runtime dep</span><span class="pill">100% coverage</span><span class="pill">6+ arches</span></div>
       <div class="legacy"><div class="badges">
       <a href="/docs/"><img alt="Documentation (MkDocs Material + mike)" src="https://img.shields.io/badge/docs-mkdocs--material-DC2626"></a>
